@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest) {
   let isAdmin = false;
 
   const pathName = request.nextUrl.pathname;
-
+  //getting user data 
   const { data } = await userService.getSession();
 
   if (data) {
