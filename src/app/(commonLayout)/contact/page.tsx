@@ -1,5 +1,6 @@
 "use client"
 import { getBlogs } from "@/actions/blog.action";
+
 import { useEffect, useState } from "react";
 
 export default function ContactPage() {

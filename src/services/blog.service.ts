@@ -1,4 +1,6 @@
 import { env } from "@/env";
+import { BlogData } from "@/types";
+import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
 
@@ -35,6 +37,8 @@ export const blogService = {
       if (options?.revalidate) {
         serviceConfig.next = { revalidate: options.revalidate };
       }
+      //revalidation er part
+      serviceConfig.next = { ...serviceConfig.next, tags: ["blogPost"] };
 
       const res = await fetch(url, serviceConfig);
 
@@ -50,6 +54,8 @@ export const blogService = {
     }
   },
 
+
+  // getting individual   post 
   getBlogById: async function (id: string) {
     try {
       const res = await fetch(`${API_URL}/posts/${id}`);
@@ -61,7 +67,38 @@ export const blogService = {
       }
       return { data: null, error: "Something Went wrong!" };
     } catch (err) {
-      return { data: null, error: "Something Went wrong!" };
+      return { data: null, error: { message: "Something Went Wrong!" } };
+    }
+  },
+
+  //creating blog post
+  createBlogPost: async (blogData: BlogData) => {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${API_URL}/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(blogData),
+      });
+
+      console.log("this is response", res);
+
+      const data = await res.json();
+
+      console.log("this is data after convert to json", data);
+
+      if (data.error) {
+        return {
+          data: null,
+          error: { message: "Something Went wrong" },
+        };
+      }
+      return { data: data, error: null };
+    } catch (err) {
+      return { data: null, error: { message: "Something Went Wrong!" } };
     }
   },
 };
