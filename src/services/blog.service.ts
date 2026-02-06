@@ -7,6 +7,7 @@ const API_URL = env.API_URL;
 interface getBlogParams {
   isFeatured?: boolean;
   search?: string;
+  page?: string;
 }
 interface getServiceOption {
   cache?: RequestCache;
@@ -47,15 +48,13 @@ export const blogService = {
       if (data.success) {
         return { data: data, error: null };
       }
-
       return { data: null, error: { message: "Something Went Wrong!" } };
     } catch (err) {
       return { data: null, error: { message: "Something Went Wrong!" } };
     }
   },
 
-
-  // getting individual   post 
+  // getting individual   post
   getBlogById: async function (id: string) {
     try {
       const res = await fetch(`${API_URL}/posts/${id}`);
@@ -84,11 +83,7 @@ export const blogService = {
         body: JSON.stringify(blogData),
       });
 
-      console.log("this is response", res);
-
       const data = await res.json();
-
-      console.log("this is data after convert to json", data);
 
       if (data.error) {
         return {

@@ -55,12 +55,7 @@ export function CreateBlogFormClient() {
           .map((item) => item.trim())
           .filter((item) => item !== ""),
       };
-
-      console.log(blogData);
-
       try {
-        //logic here
-
         const res = await createBlogPost(blogData);
         if (res.error) {
           toast.error(res.error.message, { id: toastId });
@@ -68,6 +63,7 @@ export function CreateBlogFormClient() {
         }
 
         toast.success("Post created successfully!", { id: toastId });
+        form.reset();
       } catch (err) {
         toast.error("Something Went Wrong", { id: toastId });
       }
@@ -75,7 +71,7 @@ export function CreateBlogFormClient() {
   });
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Create A Blog</CardTitle>
         <CardDescription>Write your thoughts..</CardDescription>
